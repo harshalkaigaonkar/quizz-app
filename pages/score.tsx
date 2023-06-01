@@ -35,7 +35,8 @@ export default function Home() {
         <MobileLayout>
           <div className="h-full w-full flex flex-col justify-end items-center bg-[#AF9CF3] bg-[url(/images/bg-confetti.png)] bg-contain bg-no-repeat">
           <div className="h-4/5 w-full bg-white rounded-t-[60px]">
-             </div>
+            
+          </div>
           </div>
         </MobileLayout>
       </>
