@@ -5,6 +5,9 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { GetStaticProps } from "next";
 import axios from "axios";
+import Image from "next/image";
+import AnswerOptions from "@/components/options";
+import RightArrow from "@/components/svgs/right-arrow";
 
 const nunito = Nunito({
   weight: ['600', '800', '900'],
@@ -20,47 +23,44 @@ const poppins = Poppins({
   preload: false
 })
 
-type QuestionPageProps = {
-    questions: 
-        {
-            id: number,
-            question: string,
-            options: [string],
-            multiOption: boolean,
-            img?: string,
-            answer: number|number[]
-        }[]
-}
-
 export default function Home({questions}: QuestionPageProps) {
     const router = useRouter();
     const [questionNo, setQuestionNo] = useState<number>(1);
     const [selectedOptionIndex, setSelectedOptionIndex] = useState<number[]>([]);
+    const [score, setScore] = useState<number>(0);
+    const [error, setError] = useState<string>("");
+
+    const setErrorFunction = (er: string) => {
+        setError(er);
+        setTimeout(() => {
+            setError("");
+        }, 5000);
+    }
+    
     
     const handleStartClick = () => {
-
-      router.push("/score");
-    }
-    const onSelectOptionHandler = (e: any) => {
-        //logic remaining
-        const index: number = e.target.id;
-        let error: undefined;
-        if(selectedOptionIndex.includes(index)) {
-            selectedOptionIndex.splice(selectedOptionIndex.indexOf(index), 1);
+        if(selectedOptionIndex.length > 0)
+        {
+            if(!questions[questionNo-1].multiOption) {
+                console.log(questions[questionNo-1].answer[0] === selectedOptionIndex[0], "hwloj")
+            } else 
+            console.log( "jsygadfyg",
+                questions[questionNo-1].answer.length === selectedOptionIndex.length && !selectedOptionIndex.some((item) => !questions[questionNo-1].answer.includes(item))
+            )
         }
         else {
-            if(selectedOptionIndex.length === 0) {
-                
-            }
-            if(questions[1].multiOption) {
-
-            }
+            setErrorFunction("Please Select at least one option!");
+            return;
         }
-        setSelectedOptionIndex(selectedOptionIndex);
+        if(questionNo === questions.length)
+            router.push("/score");
+        else
+            setQuestionNo(questionNo+1);
     }
     const style = {
         "--tw-value": `${questionNo * 100/questions.length}%`
     } as React.CSSProperties;
+
     return (
         <>
         <Head>
@@ -68,7 +68,7 @@ export default function Home({questions}: QuestionPageProps) {
         </Head>
         <MobileLayout>
           <div className="h-full w-full flex flex-col justify-end items-center bg-[#AF9CF3] bg-[url(/images/bg-confetti.png)] bg-contain bg-no-repeat bg-fixed text-black">
-            <div className="relative top-20 h-full w-full flex flex-col items-center">
+            <div className="relative top-20 h-full w-full flex flex-col items-center animate-bounce">
                 <div className="absolute top-0 bg-white w-40 h-40 rounded-full inline-flex justify-center items-center">
                     <div className="w-[70%] h-[70%] z-20 rounded-full flex justify-center items-center bg-gradient-custom" style={style}>
                         <progress className="hidden" max="100" value="40"></progress>
@@ -76,22 +76,20 @@ export default function Home({questions}: QuestionPageProps) {
                     </div>
                 </div>
                 <div className="pt-20 h-full px-5 mt-20 w-full bg-white rounded-t-[30px]">
-                    <p className={`${poppins.variable} text-[25px] font-extrabold`}>{questions[1].question}</p>
-                    <div className="my-10 mb-24 flex flex-col gap-4" onClick={onSelectOptionHandler}>
-                        {questions[1].options.map((item, index) => (
-                            <>
-                                <div key={index} id={`${index}`} className={`${selectedOptionIndex.includes(index) && "border-[#44B77B]"}
-                                    p-4 flex flex-row justify-start items-center gap-3 border rounded-[20px] cursor-pointer bg-[#F3F4FA] hover:bg-black/10`}>
-                                    <span className="m-3 w-6 h-6 rounded-full border border-black" />
-                                    <p className={`${nunito.variable} font-[600] m-3`}>{item}</p>
-                                </div>
-                            </>
-                        ))}
-                    </div>
+                    <p className={`${poppins.variable} text-[25px] font-extrabold`}>{questions[questionNo-1].question}</p>
+                    {questions[questionNo-1].img && (
+                        <div className="relative w-full h-80 overflow-hidden">
+                            <Image className="scale-150" src={questions[questionNo-1].img as string} alt="question_img" objectFit="contain" layout="fill" priority />
+                        </div>
+                    )}
+                    <AnswerOptions questions={questions} questionNo={questionNo} selectedOptionIndex={selectedOptionIndex} setSelectedOptionIndex={setSelectedOptionIndex} />
                 </div>
             </div>
-            <div className="w-full flex justify-center sticky bottom-5">
-                <button onClick={handleStartClick} className={`${nunito.variable} w-[95%] bg-[#FF3B3F] rounded-[60px] text-3xl text-white font-bold py-2`}>Next</button>
+            <div className="w-full h flex flex-col justify-evenly items-center sticky bottom-5">
+                <div className={`mb-1 w-full inline-block align-middle`}>
+                    <p className="w-full text-center font-medium text-sm text-red-600 animate-bounce">{error}</p>
+                </div>
+                <button onClick={handleStartClick} className={`${nunito.variable} group relative w-[95%] bg-[#FF3B3F] rounded-[60px] text-3xl text-white font-bold py-2`}>Next<span className="absolute right-0 py-2 px-10 transition duration-300 group-hover:translate-x-4 animate-bounce"><RightArrow /></span></button>
             </div>
           </div>
         </MobileLayout>
@@ -115,7 +113,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
                         "Personal feeling"
                     ],
                     multiOption: false,
-                    answer: 2,
+                    answer: [2],
                 },
                 {
                     id: 2,
@@ -127,8 +125,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
                         "Make a questionary",
                         "Personal feeling"
                     ],
-                    multiOption: false,
-                    answer: 2,
+                    multiOption: true,
+                    answer: [2, 4],
                     img: "/images/2-q-img.png",
                 },
                 {
