@@ -2,13 +2,14 @@ import React from 'react'
 import Pointer from './svgs/pointer'
 
 const ScoreMeter = ({score}: {score: number}) => {
+    const turn: number = parseInt((score * 1.8).toFixed(), 10);
   return (
     <div className="relative w-80 h-80 flex justify-center items-center rounded-full">
         <div className="absolute top-0 w-full h-[50%] rounded-tr-full rounded-tl-full bg-gradient-meter-range"></div>
             <div className="z-10 w-[95%] h-[95%] flex justify-center items-center rounded-full bg-gradient-custom">
                 <div className="relative w-[98%] h-[98%] z-20 rounded-full flex justify-center items-center bg-gradient-meter">
                 <div className="absolute top-0 w-full h-[50%] flex justify-center items-center">
-                    <div className={`${(score * 1.8) > 90 ? ` rotate-[${(score * 1.8) - 90}deg] ` : `-rotate-[${90 - (score * 1.8)}deg]`} absolute origin-bottom rotate-0 w-20 h-full bg-transparent z-20 flex justify-start items-start`}>
+                    <div style={{transform: `rotate(${turn - 90}deg)`}} className="absolute origin-bottom w-20 h-full bg-transparent z-20 flex justify-start items-start">
                         <Pointer />
                     </div>
                     </div>
