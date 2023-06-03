@@ -8,7 +8,7 @@ import Image from "next/image";
 import AnswerOptions from "@/components/options";
 import RightArrow from "@/components/svgs/right-arrow";
 
-export default function Home({questions}: QuestionPageProps) {
+export default function Page({questions}: QuestionPageProps) {
     const router = useRouter();
     const [questionNo, setQuestionNo] = useState<number>(1);
     const [selectedOptionIndex, setSelectedOptionIndex] = useState<number[]>([]);
