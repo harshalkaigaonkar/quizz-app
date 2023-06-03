@@ -47,7 +47,6 @@ export default function handler(
         }
         remaining--;
 
-
         return res.status(200).json({
           type: "success",
           data:  {
@@ -58,11 +57,14 @@ export default function handler(
         })
       }
       case "GET": {
+        let newCorrect = correct;
+        let newIncorrect = incorrect;
+        console.log({newCorrect, newIncorrect})
           return res.status(200).json({
             type: "success",
             data: {
-              correct,
-              incorrect
+              correct: newCorrect,
+              incorrect: newIncorrect
             }
           })
       }

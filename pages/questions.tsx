@@ -2,7 +2,7 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import axios from "axios";
 import Image from "next/image";
 import AnswerOptions from "@/components/options";
@@ -96,7 +96,7 @@ export default function Page({questions}: QuestionPageProps) {
     )
   }
 
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const {data} = await axios.get(`${process.env.BASE_URL}/api/get-questions`);
     await axios.post(`${process.env.BASE_URL}/api/score`, {
         reset: true

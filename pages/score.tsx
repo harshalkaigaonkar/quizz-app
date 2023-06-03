@@ -2,7 +2,7 @@ import MobileLayout from "@/components/layout/MobileLayout";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { GetStaticProps } from "next";
+import { GetServerSideProps, GetStaticProps } from "next";
 import Pointer from "@/components/svgs/pointer";
 import ScoreMeter from "@/components/ScoreMeter";
 import axios from "axios";
@@ -49,22 +49,12 @@ export default function Question({incorrect , correct}: {
     )
   }
 
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  try {
+export const getServerSideProps: GetServerSideProps = async (context) => {
     const {data} = await axios.get(`${process.env.BASE_URL}/api/score`);
-    console.log(data)
+    console.log(data.data)
     return {
       props: {
         ...data.data
       }
     }
-  } 
-  catch (err) {
-    return {
-      redirect: {
-        destination: '/questions',
-        permanent: false,
-      },
-    }
-  }
 } 

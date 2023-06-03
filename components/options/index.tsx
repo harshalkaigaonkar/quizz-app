@@ -28,7 +28,7 @@ const AnswerOptions = ({questions, questionNo, selectedOptionIndex, setSelectedO
                   <div id={`${index}`} className="m-3 w-8 h-8 rounded-full border border-[3px] flex justify-center items-center">
                    {selectedOptionIndex.includes(index) && <TickIcon />}
                   </div>
-              <p className="--font-nunito font-[600] m-3">{item}</p>
+              <p id={`${index}`} className="--font-nunito font-[600] m-3">{item}</p>
           </div>
         ))}
     </div>
