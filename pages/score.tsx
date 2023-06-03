@@ -7,7 +7,7 @@ import Pointer from "@/components/svgs/pointer";
 import ScoreMeter from "@/components/ScoreMeter";
 import axios from "axios";
 
-export default function Page({incorrect , correct}: {
+export default function Question({incorrect , correct}: {
   incorrect: number,
   correct: number
 }) {
