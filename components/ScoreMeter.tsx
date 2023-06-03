@@ -1,8 +1,8 @@
 import React from 'react'
 import Pointer from './svgs/pointer'
 
-const ScoreMeter = ({score}: {score: number}) => {
-    const turn: number = parseInt((score * 1.8).toFixed(), 10);
+const ScoreMeter = ({score}: {score: string}) => {
+    const turn: number = parseInt((parseInt(score, 10) * 1.8).toFixed(), 10);
   return (
     <div className="relative w-80 h-80 flex justify-center items-center rounded-full">
         <div className="absolute top-0 w-full h-[50%] rounded-tr-full rounded-tl-full bg-gradient-meter-range"></div>

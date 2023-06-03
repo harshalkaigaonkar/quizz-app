@@ -12,7 +12,7 @@ export default function Question({incorrect , correct}: {
   correct: number
 }) {
     const router = useRouter();
-    const [score, setScore] = useState<number>(correct * 100/(correct+incorrect));
+    const [score, setScore] = useState<string>((correct * 100/(correct+incorrect)).toFixed());
     
     const handleStartClick = () => {
       router.push("/");
