@@ -49,8 +49,17 @@ export default function Question({incorrect , correct}: {
     )
   }
 
+  function return_url(context: any) {
+    if (process.env.NODE_ENV === "production") {
+      return `https://${context.req.rawHeaders[1]}`;
+    } else {
+      return "http://localhost:3000";
+    }
+  }
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const {data} = await axios.get(`${process.env.BASE_URL}/api/score`);
+  const url = return_url(context)
+    const {data} = await axios.get(`${url}/api/score`);
     console.log(data.data)
     return {
       props: {

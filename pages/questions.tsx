@@ -96,9 +96,18 @@ export default function Page({questions}: QuestionPageProps) {
     )
   }
 
+  function return_url(context: any) {
+    if (process.env.NODE_ENV === "production") {
+      return `https://${context.req.rawHeaders[1]}`;
+    } else {
+      return "http://localhost:3000";
+    }
+  }
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
-    const {data} = await axios.get(`${process.env.BASE_URL}/api/get-questions`);
-    await axios.post(`${process.env.BASE_URL}/api/score`, {
+    let url = return_url(context);
+    const {data} = await axios.get(`${url}/api/get-questions`);
+    await axios.post(`${url}/api/score`, {
         reset: true
     });
     return {
