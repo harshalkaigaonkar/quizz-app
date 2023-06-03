@@ -50,7 +50,7 @@ export default function Question({incorrect , correct}: {
   }
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
-  // try {
+  try {
     const {data} = await axios.get(`${process.env.BASE_URL}/api/score`);
     console.log(data)
     return {
@@ -58,13 +58,13 @@ export const getStaticProps: GetStaticProps = async ({params}) => {
         ...data.data
       }
     }
-  // } 
-  // catch (err) {
-    // return {
-    //   redirect: {
-    //     destination: '/questions',
-    //     permanent: false,
-    //   },
-    // }
-  // }
+  } 
+  catch (err) {
+    return {
+      redirect: {
+        destination: '/questions',
+        permanent: false,
+      },
+    }
+  }
 } 
